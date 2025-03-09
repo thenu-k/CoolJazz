@@ -1,0 +1,95 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block body %}
+<div class="home">
+    {% include 'components/search.html' %} 
+    <div class="postList">
+        {% for post in articles %}
+        <div class="post">
+            <div class="content">
+                <h3>{{ post.title }}</h3>
+                <p>{{ post.abstract}}</p>
+            </div>
+            <div class="link">
+                <a href="/article/{{ post.id}}">READ MORE</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+<style>
+    .home{
+        display: flex; flex-direction: column; align-items: center;
+        width: 60%;
+    }
+    .postList{
+        margin-top: 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+    .post{
+        width: 100%;
+        padding: 40px 20px;
+        box-sizing: border-box;
+        margin: 0 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: black;
+        border: 1px solid white;
+        border-radius: 10px;
+        margin-bottom: 40px;
+    }
+    .post:last-of-type{
+        margin-bottom: 0;
+    }
+    .post .content{
+        width: 90%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: left;
+        /* margin-left: 40px; */
+    }
+    .post .content h3{
+        font-size: 1.2em;
+        margin: 0;
+        padding: 0;
+        font-weight: 600;
+    }
+    .post p{
+        font-size: 1em;
+        margin: 0;
+        margin-top: 40px;
+        padding: 0;
+        line-height: 2;
+    }
+    .post .link{
+        width: 90%;
+        display: flex;
+        margin-top: 40px;
+    }
+    .post .link a{
+        width: 150px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: white;
+        color: black;
+        font-size: 1em;
+        text-decoration: none;
+        border: 1px solid white;
+        font-weight: 600;
+    }
+    .post .link a:hover{
+        background-color: black;
+        color: white;
+    }
+</style>
+{% endblock %}

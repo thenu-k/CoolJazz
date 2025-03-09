@@ -1,0 +1,343 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block body %}
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet"/>
+<div class="createContainer">
+    <div class="inner">
+        {% if edit %}
+        <h1>EDIT ARTICLE</h1>
+        {% else %}
+        <h1>CREATE ARTICLE</h1>
+        {% endif %}
+        <!-- <div class="disclaimer">
+            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eligendi aliquid beatae odit quia tenetur autem, ipsa maiores itaque quaerat facere deserunt id earum fugit neque quo exercitationem rerum. Culpa, dolorum.</p>
+        </div> -->
+        <form id="form">
+        {% csrf_token %}
+            <ul>
+                <li>
+                    <label for="title">TITLE</label>
+                    {% if edit %}
+                    <input type="text" name="title" id="title" required value="{{article.title}}">
+                    {% else %}
+                    <input type="text" name="title" id="title" required>
+                    {% endif %}
+                </li>
+                <li>
+                    <label for="content">ABSTRACT</label>
+                    {% if edit %}
+                    <textarea name="abstract" id="abstract" required>{{article.abstract}}</textarea>
+                    {% else %}
+                    <textarea name="abstract" id="abstract" required></textarea>
+                    {% endif %}
+                <li>
+                    <label for="content">CONTENT</label>
+                    {% if edit %}
+                    <div id="editor"></div>
+                    {% else %}
+                    <div id="editor">
+                        <p>Stand on the shoulders of giants...</p>
+                        <p><br /></p>
+                    </div>
+                    {% endif %}
+                </li>
+                <li class="controls">
+                    <button type="submit" class="submit">SUBMIT</button>
+                </li>
+            </ul>
+        </form>
+    </div>
+    {% if edit %}
+    <div id="EDIT" class="{{article.id}}">{{article.content}}</div>
+    {% endif %}
+</div>
+<script defer>
+    // Quill.register('modules/imageResize', ImageResize);
+    var toolbarOptions = [
+        ['bold'],        // toggled buttons
+        ['blockquote', 'code-block'],
+        // [{ 'header': 1 }, { 'header': 2 }],               
+        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+        [{ 'script': 'sub'}, { 'script': 'super' }],   
+        // [{ 'indent': '-1'}, { 'indent': '+1' }],         
+        [{ 'size': ['small', false, 'large', 'huge'] }], 
+        // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+        [ 'link', 'image'],       
+        [{ 'color': [] }, { 'background': [] }],         
+        [{ 'align': [] }],
+        ['clean']                                         // remove formatting button
+    ];
+    const quill = new Quill('#editor', {
+        modules: {
+            toolbar: {
+                container: toolbarOptions,
+                handlers: {
+                    'image': function() {
+                        const range = this.quill.getSelection();
+                        const value = prompt('Enter image URL:');
+                        if(value){
+                            this.quill.insertEmbed(range.index, 'image', value, Quill.sources.USER);
+                        }
+                    }
+                }
+            }
+        },
+        theme: 'snow'
+    });
+    if (document.getElementById('EDIT')!=null){
+        var content = document.getElementById('EDIT').innerText;
+        quill.root.innerHTML = content;
+    }
+
+    form = document.getElementById('form');
+    form.onsubmit= function(event){
+        postHandler(event);
+    }
+    const postHandler = async(event) =>{
+        event.preventDefault();
+        const button = document.querySelector('.createContainer .submit');
+        button.innerText = 'SENDING...';
+        const title = document.getElementById('title').value;
+        const content = quill.root.innerHTML;
+        const abstract = document.querySelector('textarea').value;
+        const data = {
+            title: title,
+            content: content,
+            abstract: abstract
+        }
+        if (document.getElementById('EDIT')!=null){
+            edit = true;
+        }else{
+            edit = false;
+        }
+        if(edit){
+            articleID = document.querySelector('.createContainer #EDIT').classList[0];
+            const response = await fetch(`/editArticle/${articleID}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('input[name="csrfmiddlewaretoken"]').value
+                },
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();  
+            button.innerText = 'DONE';
+            if(result.status === 'success'){
+                window.location.href = '/';
+            }
+        }else{
+            const response = await fetch('/createArticle', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('input[name="csrfmiddlewaretoken"]').value
+                },
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();  
+            button.innerText = 'DONE';
+            if(result.status === 'success'){
+                window.location.href = '/';
+            }
+        }
+    }
+</script>
+<style>
+    #EDIT{
+        display: none;
+    }
+    .createContainer{
+        width: 60%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: black;
+        border: 1px solid white;
+        border-radius: 10px;
+        padding: 40px 20px;
+    }
+    .createContainer .inner{
+        width: 90%;
+        display: flex;
+        flex-direction: column;
+        align-items: left;
+    }
+    .createContainer h1{
+        font-size: 1.2em;
+        margin: 0;
+        padding: 0;
+        font-weight: 600;
+    }
+    .createContainer form{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: left;
+        margin-top: 20px;
+    }
+    .createContainer form ul{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: left;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    .createContainer form ul li{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: left;
+        margin-top: 20px;
+        padding-top: 20px;
+        /* border-top: 1px dashed white; */
+    }
+    .createContainer li:first-of-type{
+        margin-top: 0;
+    }
+    .createContainer li:last-of-type{
+        border-top: 1px solid white;
+    }
+    .createContainer li.controls{
+        padding-top: 60px;
+        margin-top: 0;
+        
+    }
+    .createContainer li.controls button{
+        padding: 0 30px;
+        width: fit-content;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: white;
+        color: black;
+        font-family: 'PT Serif', sans-serif;
+        font-size: 1em;
+        font-weight: 600;
+        outline: 0;
+        border: 1px solid white;
+    }
+    .createContainer li.controls button:hover{
+        background-color: black;
+        color: white;
+        cursor: pointer;
+    }
+    .createContainer label{
+        font-size: 1em;
+        margin: 0;
+        padding: 0;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+    .createContainer .disclaimer{
+        width: 100%;
+        height: fit-content;
+        display: flex;
+        flex-direction: column;
+        align-items: left;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    .createContainer .disclaimer p{
+        font-size: 1em;
+        margin: 0;
+        padding: 0;
+        line-height: 2;
+    }
+    .createContainer input {
+        width: 100%;
+        height: 40px;
+        border: 1px solid white;
+        /* border-radius: 2.5px; */
+        padding: 0 20px;
+        font-size: 1em;
+        background-color: black;
+        color: white;
+        outline: none;
+        box-sizing: border-box;
+        font-family: 'PT Serif', sans-serif;
+    }
+    .search input::placeholder{
+        color: white;
+        font-family: 'PT Serif', sans-serif;
+    }
+    .createContainer textarea{
+        width: 100%;
+        box-sizing: border-box;
+        height: 200px;
+        border: 1px solid white;
+        /* border-radius: 2.5px; */
+        padding: 20px;
+        font-size: 1em;
+        background-color: black;
+        /* max-height: 250px;
+        min-height: 200px; */
+        /* stop user expannding y */
+        resize:none;
+        color: white;
+        outline: none;
+        font-family: 'PT Serif', sans-serif;
+    }
+    #editor{
+        font-size: inherit;
+    }
+    .ql-container.ql-snow{
+        border: 0;
+        color: white;
+    }
+    .ql-toolbar.ql-snow{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+    .ql-editor{
+        padding: 20px 0;
+        font-size: 1em;
+        line-height: 2;
+    }
+    .ql-toolbar.ql-snow .ql-picker-label,
+    .ql-toolbar.ql-snow .ql-picker-item,
+    .ql-toolbar.ql-snow .ql-stroke,
+    .ql-toolbar.ql-snow .ql-fill,
+    .ql-toolbar.ql-snow .ql-picker-options {
+        color: white;
+        stroke: white;
+        fill: black;
+    }
+
+    .ql-toolbar.ql-snow .ql-picker-options {
+        background-color: black;
+    }
+
+    .ql-toolbar.ql-snow .ql-picker-label:hover,
+    .ql-toolbar.ql-snow .ql-picker-item:hover,
+    .ql-toolbar.ql-snow .ql-stroke:hover,
+    .ql-toolbar.ql-snow .ql-fill:hover {
+        color: white;
+        stroke: white;
+        fill: black;
+    }
+    span.ql-size > span:nth-child(1){
+        display: flex;
+        align-items: center;
+        /* justify-content: center; */
+    }
+    .ql-picker-item{
+        padding: 5px 10px;
+        background-color: black;
+        color: white;
+    }
+    .ql-picker-item:hover{
+        background-color: white;
+        color: black !important
+        ;
+    }
+    .ql-snow .ql-picker-options{
+        padding: 0;
+    }
+</style>
+
+{% endblock %}

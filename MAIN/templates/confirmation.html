@@ -1,0 +1,106 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block body %}
+<div class="confirmationContainer">
+    <div class="confirmation">
+        <h1>{{confirmation.title}}</h1>
+        <p class="message">{{confirmation.message}}</p>
+        {% if confirmation.extra %}
+        <p class="extra">Information: {{confirmation.extra}}</p>
+        {% endif %}
+        <div class="confirmationButtons">
+            {% for link in confirmation.options %}
+                {% if link.2%}
+                    <a href="{{link.1}}" class="{{link.2}}">{{link.0}}</a>
+                {% else %}
+                    <a href="{{link.1}}">{{link.0}}</a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<script defer>
+    buttons = document.querySelectorAll('.confirmationButtons a');
+    buttons.forEach(button => {
+        if (button.className != ''){
+            // add color to button
+            button.style.backgroundColor = button.className;
+            button.style.color = 'white';
+        }
+    });
+</script>
+<style>
+    .confirmationContainer{
+        display: flex;
+        width: 60%;
+        padding: 40px 0;
+        background-color: black;
+        color: white;
+        border: 1px solid white;
+        border-radius: 10px;
+        flex-direction: column;
+        align-items: center;
+    }
+    .confirmation{
+        display: flex;
+        flex-direction: column;
+        align-items: left;
+        width: 90%;
+    }
+    .confirmation h1{
+        font-size: 1em;
+        margin: 0;
+        padding: 0;
+        font-weight: 600;
+        margin-bottom: 40px;
+    }
+    .confirmation .message{
+        font-size: 1em;
+        margin: 0;
+        padding: 0;
+        margin-bottom: 10px;
+    }
+    .confirmation p.extra{
+        font-size: 1em;
+        margin: 0;
+        padding: 0;
+
+        margin-bottom: 50px;
+    }
+    .confirmation p{
+        font-size: 1em;
+        margin: 0;
+        padding: 0;
+        margin-bottom: 10px;
+        display: flex;
+        flex-direction: row;
+    }
+    .confirmation .confirmationButtons{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        width: fit-content;
+    }
+    .confirmation .confirmationButtons a{
+        font-size: 1em;
+        margin: 0; 
+        margin-right: 20px;
+        text-decoration: none;
+        color: black;
+        background-color: white;
+        width: 150px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid white;
+        font-weight: 600;
+        height: 40px;
+    }
+    .confirmation .confirmationButtons a:hover{
+        background-color: black;
+        color: white;
+    }
+</style>
+{% endblock %}

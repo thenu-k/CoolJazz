@@ -1,0 +1,108 @@
+{% load static %}
+<!-- {% block body %} -->
+<div class="search">
+    <h1>COMPOUNDING INTEREST</h1>
+   <div>
+        <input type="text" placeholder="">
+   </div>
+   <div class="controls">
+        <button>
+            <!-- <img src="{% static 'search.png' %}" alt=""> -->
+            <p>SEARCH</p>
+        </button>
+        <button>
+            <!-- <img src="{% static 'die.png' %}" alt=""> -->
+            <p>RANDOM</p>
+        </button>
+   </div>
+</div>
+<style>
+    .search{
+        width: 100%;
+        background-color: black;
+        color: white;
+        font-size: 1em;
+        border: 1px solid white;
+        border-radius: 10px;
+        display: flex; 
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 0px;
+        /* display: none; */
+        /* box-shadow: 0px 0px 5px 2px rgb(170, 170, 170); */
+    }
+    .search > div{
+        width: 80%;
+        display: flex;
+        justify-content: center;
+    }
+    .search input{
+        width: 100%;
+        height: 40px;
+        border: 1px solid white;
+        /* border-radius: 2.5px; */
+        padding: 0 20px;
+        font-size: 1em;
+        background-color: black;
+        color: white;
+        outline: none;
+        margin-bottom: 60px;
+        font-family: 'PT Serif', sans-serif;
+    }
+    .search input::placeholder{
+        color: white;
+        font-family: 'PT Serif', sans-serif;
+    }
+    .search h1{
+        /* width: 80%; */
+        font-size: 1.2em;
+        margin: 0;
+        padding-bottom: 40px;
+        font-weight: 600;
+    }
+    .search input:focus{
+        /* outline: 2px solid red; */
+        /* border: 1px dashed white; */
+        background-color: black;
+
+    }
+    .search .controls{
+        display: flex;
+        justify-content: center;
+        width: 80%;
+    }
+    .search button{
+        height: 40px;
+        /* padding: 0 10px; */
+        border: none;
+        padding: 0;
+        /* border-radius: 2.5px; */
+        /* background-color: rgb(218, 218, 218); */
+        color: black;
+        font-size: 1em;
+        margin: 0 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 150px;
+        border: 1px solid white;
+    }
+    .search p {
+        width: 100%;
+        height: 100%;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+        margin: 0;
+        color: black;
+        font-weight: 600;
+        background-color: white;
+        /* border-radius: 2.5px; */
+    }
+    .search button:hover p{
+        background-color: black;
+        color: white;
+    }
+</style>
+<!-- {% endblock %} -->
