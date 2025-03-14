@@ -68,6 +68,17 @@
             }
             *{
                 border-radius: 0 !important;
+                box-sizing: border-box !important;
+            }
+            @media  (max-width: 1024px){
+                .innerBody > *{
+                    width:90% !important;
+                }
+            }
+            @media (min-width: 1024px){
+                .innerBody > *{
+                    width:1000px;
+                }
             }
             html{
                 width: 100%;
