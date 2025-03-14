@@ -13,4 +13,6 @@ urlpatterns = [
     path("dangerous/delete/<int:article_id>", views.deleteArticle, name="deleteArticle"),
     path("edit/<int:article_id>", views.editPage, name="editPage"),
     path("editArticle/<int:article_id>", views.editArticle, name="editArticle"),
+    path("search", views.search, name="search"),
+    path("random", views.randomArticle, name="randomArticle"),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

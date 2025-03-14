@@ -1,21 +1,45 @@
 {% load static %}
 <!-- {% block body %} -->
-<div class="search">
+<form class="search" onsubmit="search(event)">
     <h1>COMPOUNDING INTEREST</h1>
-   <div>
-        <input type="text" placeholder="">
+   <div class="input">
+        {% if fullSearch %}
+            <label for="title">TITLE</label>
+        {% endif %}
+        <input type="text" placeholder="" value="{{ title }}" class="titleInput" name="title">
    </div>
+   {% if fullSearch %}
+    <div class="input">
+        <label for="abstract">ABSTRACT</label>
+        <input type="text" placeholder="" value="{{ abstract }}" class="abstractInput" name="abstract">
+    </div>
+    <div class="input">
+        <label for="content">CONTENT</label>
+        <input type="text" placeholder="" value="{{ content }}" class="contentInput" name="content">
+    </div>
+    {% endif %}
    <div class="controls">
-        <button>
-            <!-- <img src="{% static 'search.png' %}" alt=""> -->
+        <button type="submit">
             <p>SEARCH</p>
         </button>
-        <button>
-            <!-- <img src="{% static 'die.png' %}" alt=""> -->
+        <button onclick="event.preventDefault();window.location.href = '/random'">
             <p>RANDOM</p>
         </button>
    </div>
-</div>
+</form>
+<script>
+    const search = (e) => {
+        e.preventDefault();
+        const title = document.querySelector('.titleInput').value;
+        try{
+            var abstract = document.querySelector('.abstractInput').value;
+            var content = document.querySelector('.contentInput').value;
+            window.location.href = `/search?title=${title}&abstract=${abstract}&content=${content}`;
+        }catch(err){
+            window.location.href = `/search?title=${title}&abstract=&content=`;
+        }
+    }
+</script>
 <style>
     .search{
         width: 100%;
@@ -31,11 +55,6 @@
         /* display: none; */
         /* box-shadow: 0px 0px 5px 2px rgb(170, 170, 170); */
     }
-    .search > div{
-        width: 80%;
-        display: flex;
-        justify-content: center;
-    }
     .search input{
         width: 100%;
         height: 40px;
@@ -46,8 +65,20 @@
         background-color: black;
         color: white;
         outline: none;
-        margin-bottom: 60px;
+        margin-bottom: 30px;
         font-family: 'PT Serif', sans-serif;
+    }
+    .search > div.input{
+        width: 80%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        margin-bottom: 10px;
+    }
+    .search label{
+        font-size: 1em;
+        margin-bottom: 10px;
+        font-weight: 600;
     }
     .search input::placeholder{
         color: white;
@@ -67,6 +98,7 @@
 
     }
     .search .controls{
+        margin-top: 20px;
         display: flex;
         justify-content: center;
         width: 80%;

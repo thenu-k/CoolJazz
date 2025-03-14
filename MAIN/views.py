@@ -9,7 +9,7 @@ import json
 from django.core import serializers
 
 def index(request):
-    articles = Article.objects.filter(deleted=False)
+    articles = Article.objects.filter(deleted=False).order_by("-created")
     return render(request, "index.html", {
         "articles": articles,
         "pageName": "Cool Jazz"
@@ -112,3 +112,30 @@ def editArticle(request, article_id):
             return HttpResponseRedirect(reverse("admin:index"))
     else:
         return HttpResponseRedirect(reverse("admin:index"))
+    
+def search(request):
+    title = request.GET.get("title")
+    abstract = request.GET.get("abstract")
+    content = request.GET.get("content")
+    articles = Article.objects.filter(title__icontains=title, abstract__icontains=abstract, content__icontains=content, deleted=False).order_by("-created")
+    return render(request, "searchResults.html", {
+        "articles": articles,
+        "pageName": "Search Results",
+        "title": title,
+        "abstract": abstract,
+        "content": content,
+        "fullSearch": True
+    })
+
+def randomArticle(request):
+    articles = Article.objects.filter(deleted=False)
+    if len(articles) > 0:
+        article = articles.order_by("?").first()
+        username = article.userKey.username
+        return render(request, "article.html", {
+            "article": article,
+            "username": username,
+            "pageName": article.title
+        })
+    else:
+        return HttpResponseRedirect(reverse("index"))
