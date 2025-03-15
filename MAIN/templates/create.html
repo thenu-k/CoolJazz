@@ -115,7 +115,8 @@
             const result = await response.json();  
             button.innerText = 'DONE';
             if(result.status === 'success'){
-                window.location.href = '/';
+                link = `/article/${articleID}`;
+                window.location.href = link;
             }
         }else{
             const response = await fetch('/createArticle', {
@@ -129,7 +130,8 @@
             const result = await response.json();  
             button.innerText = 'DONE';
             if(result.status === 'success'){
-                window.location.href = '/';
+                link = `/article/${result.article_id}`;
+                window.location.href = link;
             }
         }
     }

@@ -12,7 +12,7 @@
         <div class="confirmationButtons">
             {% for link in confirmation.options %}
                 {% if link.2%}
-                    <a href="{{link.1}}" class="{{link.2}}">{{link.0}}</a>
+                    <a href="{{link.1}}" id="{{link.2}}"class="hover">{{link.0}}</a>
                 {% else %}
                     <a href="{{link.1}}">{{link.0}}</a>
                 {% endif %}
@@ -23,10 +23,16 @@
 <script defer>
     buttons = document.querySelectorAll('.confirmationButtons a');
     buttons.forEach(button => {
-        if (button.className != ''){
+        if (button.id != ''){
             // add color to button
-            button.style.backgroundColor = button.className;
+            button.style.backgroundColor = button.id;
             button.style.color = 'white';
+            button.addEventListener('mouseover', () => {
+                button.style.opacity = 0.8;
+            });
+            button.addEventListener('mouseout', () => {
+                button.style.opacity = 1;
+            });
         }
     });
 </script>
@@ -53,7 +59,7 @@
         margin: 0;
         padding: 0;
         font-weight: 600;
-        margin-bottom: 40px;
+        margin-bottom: 20px;
     }
     .confirmation .message{
         font-size: 1em;
@@ -65,8 +71,7 @@
         font-size: 1em;
         margin: 0;
         padding: 0;
-
-        margin-bottom: 50px;
+        margin-bottom: 10px;
     }
     .confirmation p{
         font-size: 1em;
@@ -82,6 +87,7 @@
         justify-content: space-between;
         align-items: center;
         width: fit-content;
+        margin-top: 20px
     }
     .confirmation .confirmationButtons a{
         font-size: 1em;
@@ -99,8 +105,7 @@
         height: 40px;
     }
     .confirmation .confirmationButtons a:hover{
-        background-color: black;
-        color: white;
+        opacity: 0.8;
     }
 </style>
 {% endblock %}
