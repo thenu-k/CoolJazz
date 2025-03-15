@@ -111,7 +111,8 @@
                 background-color: black;
                 justify-content: center;
                 border-bottom: white 1px solid;
-                height: 80px;
+                height: 70px;
+                flex-shrink: 0;
             }
             nav .logo{
                 display: flex;
@@ -147,6 +148,7 @@
                 display: flex;
                 margin-left: auto;
                 list-style: none;
+                margin: 0 auto;
             }
             nav a{
                 height: 40px;
@@ -249,6 +251,25 @@
             .post .link a:hover{
                 background-color: black;
                 color: white;
+            }
+            @media (max-width: 800px){
+            body> .innerBody{
+                margin-top: 20px;
+            }
+            .post{
+                margin-bottom: 20px;
+            }
+            .postList{
+                margin-top: 20px
+            }
+            .post p{
+                margin-top: 20px;
+            }
+            .post .link{
+                    width: 90%;
+                    display: flex;
+                    margin-top: 30px;
+                }
             }
         </style>
     </body>

@@ -79,14 +79,15 @@
         justify-content: left;
         align-items: center;
         padding: 0;
-        /* margin-top: 20px; */
-        margin-bottom: 40px;
+        margin: 30px 0;
     }
     .articleContainer .controlContainer{
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: left;;
+        flex-wrap: wrap;
+        margin-left: -10px;
     }
     .articleContainer .controlContainer h3{
         font-size: 1.2em;
@@ -97,14 +98,14 @@
     }   
     .articleContainer .controlContainer a{
         margin: 0; 
-        margin-right: 20px;
+        margin: 10px;
     }
     .articleContainer h1{
         font-size: 1.2em;
         margin: 0;
         padding: 0;
         font-weight: 600;
-        margin-bottom: 40px;
+        margin-bottom: 0px;
     }
     .articleContainer a{
         font-size: 1em;
@@ -162,6 +163,11 @@
         padding: 0;
         font-size: 1em;
         line-height: 2;
+    }
+    @media (max-width: 800px){
+        .articleContainer .content{
+            margin-top: 20px;
+        }
     }
 </style>
 {% endblock %}
